@@ -1,7 +1,7 @@
 # CS107 Fall '18
 # Notes from Thursday, September 6th.
 # Run this with:
-#     python3 -m doctest 09-06.py
+#     python3 -m doctest lec2.py
 from logic import *
 
 #
