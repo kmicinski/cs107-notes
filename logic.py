@@ -2,6 +2,9 @@
 # Various logical constructions
 # 
 
+class PreconditionException(Exception):
+        pass
+
 def precondition(value_of_precondition):
 	if (value_of_precondition != True):
 		raise PreconditionException
