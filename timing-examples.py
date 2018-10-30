@@ -60,6 +60,15 @@ def getLast(l):
     if (len(l) == 1): return head(l)
     else: return getLast(tail(l))
 
+def sillyCountDown(c):
+    if (c == 0): return
+    else: return sillyCountDown(c-1)
+
+def iterCountDown(c):
+    while (c > 0):
+        c = c - 1
+    return
+
 # Some input data to run the lists tests on
 inputData = [([1] * 2000,2000), 
              ([1] * 4000,4000), 
@@ -67,8 +76,17 @@ inputData = [([1] * 2000,2000),
              ([1] * 8000,8000),
              ([1] * 10000,10000)]
 
+inputData2 = [(2000,2000), 
+              (4000,4000), 
+              (6000,6000), 
+              (8000,8000),
+              (10000,10000)]
+
 # Test getLast with lists of size 100000, 200000, ...
-print(runTests(getLast, "Test of `getLast`", inputData))
+#print(runTests(getLast, "Test of `getLast`", inputData))
 
 # Test tail with lists of size 100000, 200000, ...
 #print(runTests(tail, "Test of `tail` (l[1:])", inputData))
+
+# Test getLast with lists of size 100000, 200000, ...
+print(runTests(iterCountDown, "Test of `iterCountDown`", inputData2))
