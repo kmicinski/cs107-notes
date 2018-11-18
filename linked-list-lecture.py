@@ -100,6 +100,7 @@ class Link:
     def getData(self): return self.data
     def getNext(self): return self.nextLink
     def hasNext(self): return self.nextLink != None
+    def setNext(self, n): self.nextLink = n
 
 l1 = Link("Hello", None)
 l2 = Link(23, l1)
@@ -121,6 +122,30 @@ class List:
     def add(self, data):
         self.first = Link(data, self.first)
     
+    # Delete a piece of data from a list
+    def delete(self, data):
+        prev = None
+        cur  = self.first
+        while (cur != None):
+            if (cur.getData() == data):
+                # Delete this link
+                if (prev == None):
+                    # Deleting the first link
+                    self.first = cur.getNext()
+                else:
+                    # Deleting a link other than the first
+                    prev.setNext(cur.getNext())
+            prev = cur
+            cur  = cur.getNext()
+
+    def reverse(self):
+        rev = None
+        cur = self.first
+        while (cur != None):
+            rev = Link(cur.getData(), rev)
+            cur = cur.getNext()
+        self.first = rev
+
     def contains(self, data):
         node = self.first
         while (node != None):

@@ -137,6 +137,55 @@ class BinaryTree:
                 return self.right.lookup(data)
             else: return False
 
+    def lookupSortedLoops(self,data):
+        t = self
+        while (t != None):
+            if (t.data == data): return True
+            elif (t.data < data):
+                t = t.right
+            elif (t.data > data):
+                t = t.left
+        # Postcondition is t == None
+        # Which indicates conceptually, that tree did not 
+        # contain data.
+        return False
+
+    def insertSortedLoops(self,data):
+        t = self
+        amIDone = False
+        # Continually, i.e., until I return
+        while (amIDone != True):
+            if (t.data == data):
+                # We found it, don't do anything else
+                amIDone = True
+            elif (t.data < data):
+                # Insert right
+                # Two cases
+                if (t.right == None):
+                    # First case: t.right == None
+                    # Insert!
+                    t.right = BinaryTree(data, None, None)
+                    # Return, or else we get stuck in loop
+                    amIDone = True
+                else:
+                    # Second case: t.right != None
+                    # Continue on with t becomes t.right
+                    t = t.right
+            else:
+                # Insert left
+                # Two cases
+                if (t.left == None):
+                    # First case: t.left == None
+                    # Insert!
+                    t.left = BinaryTree(data, None, None)
+                    # Return, or else we get stuck in loop
+                    amIDone = True
+                else:
+                    # Second case: t.left != None
+                    # Continue on with t becomes t.left
+                    t = t.left
+        
+
 print("t")
 t = BinaryTree(13, 
                BinaryTree(25, None, None),
@@ -148,8 +197,22 @@ print("lookup 25 in t:")
 print(t.lookup(25))
 print("lookupSorted 25 in t:")
 print(t.lookupSorted(25))
+print(t.lookupSortedLoops(25))
 t2 = BinaryTree(13, 
                BinaryTree(12, None, None),
                BinaryTree(16, None, BinaryTree(25, None, None)))
 print("lookupSorted 25 in t2:")
 print(t2.lookupSorted(25))
+print(t2.lookupSortedLoops(25))
+t2.insertSortedLoops(26)
+t2.insertSortedLoops(28)
+t2.insertSortedLoops(190)
+t2.insertSortedLoops(10000000)
+t2.insertSortedLoops(-12)
+t2.insertSortedLoops(-13)
+print("Looking up -13, -12, 10000000, 5, and 28")
+print(t2.lookupSortedLoops(-13))
+print(t2.lookupSortedLoops(-12))
+print(t2.lookupSortedLoops(10000000))
+print(t2.lookupSortedLoops(5))
+print(t2.lookupSortedLoops(28))
