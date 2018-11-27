@@ -44,21 +44,21 @@ class AssocList:
             s += "(%s, %s)\n" % (item[0], item[1])
         return s
 
-x = AssocList()
-x.insert("a", Car("ford","fusion","black"))
-x.insert("b", Car("mazda","rx8","blue"))
-c = x.lookup("a")
-c.model = "mustang"
-y = x.clone()
-y.insert("c", Car("a","b","c"))
-print("x is")
-print(x)
-print("y is")
-print(y)
-c = y.lookup("a")
-c.model = "othermodel..."
-print(y)
-print(x)
+# x = AssocList()
+# x.insert("a", Car("ford","fusion","black"))
+# x.insert("b", Car("mazda","rx8","blue"))
+# c = x.lookup("a")
+# c.model = "mustang"
+# y = x.clone()
+# y.insert("c", Car("a","b","c"))
+# print("x is")
+# print(x)
+# print("y is")
+# print(y)
+# c = y.lookup("a")
+# c.model = "othermodel..."
+# print(y)
+# print(x)
 
 class HashTable:
     def __init__(self,numBuckets):
