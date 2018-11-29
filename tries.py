@@ -4,6 +4,29 @@ import sys
 from matplotlib import pyplot
 from hashtables import *
 
+# hash-table based implementation of a set
+class Set:
+    def __init__(self):
+        self.hashtable = HashTable(43)
+    
+    def insert(self,e):
+        self.hashtable.insert(e,True)
+
+    def contains(self,e):
+        try:
+            self.hashtable.lookup(e)
+            # If I got here, I didn't throw an exception
+            return True
+        except:
+            return False
+
+s = Set()
+s.insert("dog")
+s.insert("cat")
+print(s.contains("dog"))
+print(s.contains("cat"))
+print(s.contains("squirrel"))
+
 sys.setrecursionlimit(100000) # python has a recurison depth of <
                               # 1000~. so for the purpose of this
                               # assignment I'm increasing it
@@ -72,44 +95,101 @@ def lookupWords(table):
         table.lookup(word)
 
 # Test getLast with lists of size 100000, 200000, ...
-#print(runTests(lookupWords, "Test of `lookupWords`", inputData))
+# print(runTests(lookupWords, "Test of `lookupWords`", inputData))
 
 class Trie:
-    def __init__(self, buckets):
-        self.content = False
-        self.contents = [None] * buckets
-        self.buckets = buckets
+    def __init__(self, numBuckets, hasContent):
+        self.content = hasContent
+        self.contents = [None] * numBuckets
+        self.buckets = numBuckets
 
     def bucket(self,chr):
         return ord(chr) - ord('a')
 
-    def lookupHelper(self,string,i,m):
-        if (i >= m):
-            return self.content
-        else:
-            return self.contents[self.bucket(string[i])] != None and self.contents[self.bucket(string[i])].lookupHelper(string,i+1,m)
+    def __str__(self):
+        return ""
 
+    def setBucket(self,character,t):
+        self.contents[self.bucket(character)] = t
+
+    def hasBucket(self,character):
+        return self.contents[self.bucket(character)] != None
+
+    def hasContent(self): return self.content
+
+    # Return True is string is in the trie (really, the set the trie
+    # represents), False otherwise.
     def lookup(self,string):
-        return self.lookupHelper(string,0,len(string))
+        """
+        >>> t1 = Trie(26, False)
+        >>> t2 = Trie(26, True)
+        >>> t3 = Trie(26, True)
+        >>> t4 = Trie(26, True)
+        >>> t1.setBucket('c', t2)
+        >>> t2.setBucket('a', t3)
+        >>> t1.setBucket('b', t4)
+        >>> t1.lookup("c")
+        True
+        >>> t1.lookup("ca")
+        True
+        >>> t1.lookup("")
+        False
+        >>> t1.lookup("car")
+        False
+        >>> t1.lookup("b")
+        True
+        """
+        # The trie that I'm currently considering
+        curTrie = self
+        # The character within `string` I'm looking at
+        i       = 0
+        
+        while(i < len(string)):
+            if (curTrie.contents[self.bucket(string[i])] != None):
+                curTrie = curTrie.contents[self.bucket(string[i])]
+            else:
+                # I will know that the string I'm looking for can't be
+                # in the trie.
+                return False
+            i = i+1
+            
+        # curTrie contains the trie represented by the string
+        return curTrie.hasContent()
 
-    def insertHelper(self,string,i,m):
-        if (i >= m):
-            # Set this bucket to True
-            self.content = True
-        else:
-            if (self.contents[self.bucket(string[i])] == None):
-                self.contents[self.bucket(string[i])] = Trie(self.buckets)
-            self.contents[self.bucket(string[i])].insertHelper(string,i+1,m)
-
+    # Insert a string into the trie at the appropriate location.
     def insert(self,string):
-        self.insertHelper(string,0,len(string))
+        curTrie = self
+        i       = 0
+
+        while(i < len(string)):
+            if (curTrie.contents[self.bucket(string[i])] != None):
+                curTrie = curTrie.contents[self.bucket(string[i])]
+            else:
+                # Potentially add necessary new bucket to the trie
+                t = Trie(self.buckets, False)
+                curTrie.contents[self.bucket(string[i])] = t
+                curTrie = t
+            i = i+1
+            
+        # curTrie contains the trie represented by the string
+        curTrie.content = True
 
 class TwentySixTrie(Trie):
     def __init__(self):
-        super(TwentySixTrie, self).__init__(26)
+        super(TwentySixTrie, self).__init__(26, False)
 
 # Some tests..
 print("Testing TwentySixTrie")
+
+t1 = Trie(26, False)
+t2 = Trie(26, True)
+t3 = Trie(26, True)
+t1.setBucket('c', t2)
+t2.setBucket('a', t3)
+
+# Question: What set does trie t1 represent?
+
+print("Testing trie")
 x = TwentySixTrie()
 x.insert("al")
 x.insert("ali")
